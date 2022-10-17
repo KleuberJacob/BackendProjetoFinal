@@ -16,8 +16,9 @@ import br.com.xmarket.DAO.UsuarioDao;
 import br.com.xmarket.Model.Usuario;
 
 @RestController
-@RequestMapping("/cadastro")
 public class UsuarioController {
+	
+	String email, senha;
 	
 	public static String getHashMd5(String value) {
         MessageDigest md;
@@ -34,17 +35,32 @@ public class UsuarioController {
 	private UsuarioDao dao;
 	
 	@CrossOrigin
+	@RequestMapping("/cadastro")
 	@PostMapping
-	public @ResponseBody Usuario novoUsuario(@RequestBody Usuario usuario) {
+	public @ResponseBody Usuario novoUsuario(@RequestBody Usuario usuario) {		
 		
-		System.out.println(usuario.getSenha_usuario());
 		String hash = getHashMd5(usuario.getSenha_usuario());
 		
 		usuario.setSenha_usuario(hash);		
 		
 		dao.save(usuario);
-//		System.out.println(usuario.toString()); 
 		return usuario;
+	}
+	
+	@CrossOrigin
+	@RequestMapping("/login")
+	@PostMapping
+	public @ResponseBody String validaUsuario(@RequestBody String emailSenha) {	
+		
+		String [] vetor = emailSenha.split(",");
+
+//		String hash = getHashMd5(usuario.getSenha_usuario());
+		System.out.println(vetor[0]);
+		System.out.println(vetor[1]);
+//		usuario.setSenha_usuario(hash);		
+		
+//		dao.save(usuario);
+		return email;
 	}
 	
 	
