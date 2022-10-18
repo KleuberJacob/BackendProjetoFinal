@@ -4,6 +4,10 @@ import java.math.BigInteger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
 //import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
@@ -63,9 +67,23 @@ public class UsuarioController {
 		
 		System.out.println(senha);
 		System.out.println(email);
+		System.out.println(validarEmail(email));
 		
 
 		return email;
+	}
+	
+	public Boolean validarEmail(String email) {
+		Boolean result=false;
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+
+		for(int i=0; i<lista.size();i++) {
+			if(lista.get(i).getEmail_usuario().equals(email)) {
+				result=true;
+			}
+		}
+		return result;
+		
 	}
 	
 	

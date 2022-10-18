@@ -32,8 +32,11 @@ public class Usuario {
 	
 	@Column(name="senha_usuario")
 	private String senha_usuario;	
-
 	
+	public Usuario(){
+		super();
+	}
+
 	public Usuario(String nome_usuario, String rg_usuario, String cpf_usuario, String email_usuario,
 			String telefone_usuario, String endereco_usuario, String senha_usuario) {
 		super();
@@ -43,7 +46,7 @@ public class Usuario {
 		this.email_usuario = email_usuario;
 		this.telefone_usuario = telefone_usuario;
 		this.endereco_usuario = endereco_usuario;
-		this.senha_usuario = senha_usuario; 
+		this.senha_usuario = senha_usuario;
 	}
 	
 
