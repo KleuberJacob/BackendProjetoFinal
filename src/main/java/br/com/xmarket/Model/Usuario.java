@@ -33,6 +33,7 @@ public class Usuario {
 	@Column(name="senha_usuario")
 	private String senha_usuario;	
 
+	
 	public Usuario(String nome_usuario, String rg_usuario, String cpf_usuario, String email_usuario,
 			String telefone_usuario, String endereco_usuario, String senha_usuario) {
 		super();
@@ -44,6 +45,7 @@ public class Usuario {
 		this.endereco_usuario = endereco_usuario;
 		this.senha_usuario = senha_usuario; 
 	}
+	
 
 	public String getNome_usuario() { 
 		return nome_usuario;

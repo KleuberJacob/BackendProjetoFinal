@@ -1,8 +1,12 @@
 package br.com.xmarket.Controller;
 
 import java.math.BigInteger;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+//import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -50,16 +54,17 @@ public class UsuarioController {
 	@CrossOrigin
 	@RequestMapping("/login")
 	@PostMapping
-	public @ResponseBody String validaUsuario(@RequestBody String emailSenha) {	
+	public @ResponseBody String validaUsuario(@RequestBody String usuario) throws ParseException {	
+		Object ob = new JSONParser().parse(usuario);
 		
-		String [] vetor = emailSenha.split(",");
+		JSONObject json = (JSONObject) ob;
+		String email= (String) json.get("tLogin");
+		String senha= getHashMd5((String) json.get("tPassword"));
+		
+		System.out.println(senha);
+		System.out.println(email);
+		
 
-//		String hash = getHashMd5(usuario.getSenha_usuario());
-		System.out.println(vetor[0]);
-		System.out.println(vetor[1]);
-//		usuario.setSenha_usuario(hash);		
-		
-//		dao.save(usuario);
 		return email;
 	}
 	
