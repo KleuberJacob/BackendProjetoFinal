@@ -45,7 +45,7 @@ public class UsuarioController {
 
 
 	@Autowired
-	private UsuarioDao dao;
+	private UsuarioDao usuarioDao;
 	
 	@CrossOrigin
 	@RequestMapping("/cadastro")
@@ -55,7 +55,7 @@ public class UsuarioController {
 			if(validarEmail(usuario.getEmail_usuario())==false) {
 				String hash = getHashMd5(usuario.getSenha_usuario());
 				usuario.setSenha_usuario(hash);		
-				dao.save(usuario);
+				usuarioDao.save(usuario);
 				return ResponseEntity.ok(true);		
 			}else {
 				return ResponseEntity.ok(false);	
@@ -99,7 +99,7 @@ public class UsuarioController {
 	@GetMapping("/dados/{id_usuario}")
 	public ResponseEntity<Usuario> puxarDados(@PathVariable int id_usuario) throws ParseException {	
 		
-		Usuario usuario = dao.findById(id_usuario).orElse(null);
+		Usuario usuario = usuarioDao.findById(id_usuario).orElse(null);
 		if(usuario != null) {
 			return ResponseEntity.ok(usuario);
 		}else {
@@ -111,24 +111,19 @@ public class UsuarioController {
 	@PutMapping("/alteracao/{id_usuario}")
 	public @ResponseBody ResponseEntity<Boolean> alterarDados(@PathVariable int id_usuario, @RequestBody Usuario newUsuario){
 
-		Usuario oldUsuario = dao.findById(id_usuario).get();
+		Usuario oldUsuario = usuarioDao.findById(id_usuario).get();
 		oldUsuario.setNome_usuario(newUsuario.getNome_usuario());
 		oldUsuario.setEmail_usuario(newUsuario.getEmail_usuario());
 		oldUsuario.setEndereco_usuario(newUsuario.getEndereco_usuario());
 		oldUsuario.setTelefone_usuario(newUsuario.getTelefone_usuario());
-		dao.save(oldUsuario);
+		usuarioDao.save(oldUsuario);
 		System.out.println(oldUsuario);
 		return ResponseEntity.ok(true);
 	}
 	
-	@RequestMapping("/addCarrinho")
-	@PostMapping
-	public @ResponseBody boolean addCarrinho(@RequestBody String usuario) throws ParseException {	
-		return true;
-	}
 	
 	public Integer buscaId(String email) {		
-		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(usuarioDao.findAll());
 
 		for(int i=0; i<lista.size();i++) {
 			if(lista.get(i).getEmail_usuario().equals(email)) {
@@ -139,12 +134,11 @@ public class UsuarioController {
 	}
 
 	
-	
 	// VALIDACOES DO BANCO
 
 	public Boolean validarEmail(String email) {
 		Boolean result=false;
-		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(usuarioDao.findAll());
 		
 		for(int i=0; i<lista.size();i++) {
 			if(lista.get(i).getEmail_usuario().equals(email)) {
@@ -156,7 +150,7 @@ public class UsuarioController {
 	
 	public Boolean validarSenha(String email, String senha) {
 		Boolean result=false;
-		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(usuarioDao.findAll());
 
 		for(int i=0; i<lista.size();i++) {
 			if(lista.get(i).getEmail_usuario().equals(email)) {
@@ -172,7 +166,7 @@ public class UsuarioController {
 	
 	public Boolean validarCpf(String cpf) {
 		Boolean result=true;
-		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(usuarioDao.findAll());
 
 		for(int i=0; i<lista.size();i++) {
 			if(lista.get(i).getCpf_usuario().equals(cpf)) {
@@ -184,7 +178,7 @@ public class UsuarioController {
 	
 	public Boolean validarRg(String rg) {
 		Boolean result=true;
-		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(usuarioDao.findAll());
 
 		for(int i=0; i<lista.size();i++) {
 			if(lista.get(i).getRg_usuario().equals(rg)) {
