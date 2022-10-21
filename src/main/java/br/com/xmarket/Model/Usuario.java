@@ -50,6 +50,14 @@ public class Usuario {
 	}
 	
 
+	public int getId_usuario() {
+		return id_usuario;
+	}
+
+	public void setId_usuario(int id_usuario) {
+		this.id_usuario = id_usuario;
+	}
+
 	public String getNome_usuario() { 
 		return nome_usuario;
 	}
@@ -104,6 +112,16 @@ public class Usuario {
 
 	public void setSenha_usuario(String senha_usuario) {
 		this.senha_usuario = senha_usuario;
+	}
+	
+	public String toString() {
+		return "{"
+				+ "'nome_usuario': '"+ getNome_usuario() +"',"
+				+ "'rg_usuario': '"+ getRg_usuario()+"',"
+				+ "'cpf_usuario': '"+ getCpf_usuario()+"',"
+				+ "'email_usuario': '"+ getEmail_usuario()+"',"
+				+ "'telefone_usuario': '"+ getTelefone_usuario()+"',"
+				+ "}";
 	}
 	
 

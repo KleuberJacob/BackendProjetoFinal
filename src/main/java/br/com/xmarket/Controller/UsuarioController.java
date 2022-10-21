@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 //import org.json.simple.JSONArray;
@@ -16,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,17 +33,6 @@ public class UsuarioController {
 	
 	//String email, senha;
 	
-	public static String getHashMd5(String value) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        BigInteger hash = new BigInteger(1, md.digest(value.getBytes()));
-        return hash.toString(16);
-    }
-
 	@Autowired
 	private UsuarioDao dao;
 	
@@ -75,10 +67,6 @@ public class UsuarioController {
 		if(validarEmail(email)==true) {
 			senha= getHashMd5((String) json.get("tPassword"));
 			logado = validarSenha(email, senha);	
-			System.out.println(senha);
-			System.out.println(email);
-			System.out.println(validarEmail(email));
-			System.out.println(logado);
 			if(logado == true) {
 				return ResponseEntity.ok(true);				
 			}else {
@@ -88,10 +76,47 @@ public class UsuarioController {
 		return null;
 	}
 	
+	@CrossOrigin
+	@GetMapping("/dados/{id_usuario}")
+	public ResponseEntity<Usuario> puxarDados(@PathVariable int id_usuario) throws ParseException {	
+		
+		Usuario usuario = dao.findById(id_usuario).orElse(null);
+		if(usuario != null) {
+			return ResponseEntity.ok(usuario);
+		}else {
+			return ResponseEntity.notFound().build(); 
+		}
+	}
+	
+	@CrossOrigin
+	@PutMapping("/alteracao/{id_usuario}")
+	public @ResponseBody ResponseEntity<Boolean> alterarDados(@PathVariable int id_usuario, @RequestBody Usuario newUsuario){
+
+		Usuario oldUsuario = dao.findById(id_usuario).get();
+		oldUsuario.setNome_usuario(newUsuario.getNome_usuario());
+		oldUsuario.setEmail_usuario(newUsuario.getEmail_usuario());
+		oldUsuario.setEndereco_usuario(newUsuario.getEndereco_usuario());
+		oldUsuario.setTelefone_usuario(newUsuario.getTelefone_usuario());
+		dao.save(oldUsuario);
+		System.out.println(oldUsuario);
+		return ResponseEntity.ok(true);
+	}
+	
 	
 	
 	// VALIDACOES DO BANCO
 	
+	public static String getHashMd5(String value) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        BigInteger hash = new BigInteger(1, md.digest(value.getBytes()));
+        return hash.toString(16);
+    }
+
 	public Boolean validarEmail(String email) {
 		Boolean result=false;
 		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
@@ -131,6 +156,7 @@ public class UsuarioController {
 		}
 		return result;
 	}
+	
 	public Boolean validarRg(String rg) {
 		Boolean result=true;
 		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
