@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +28,6 @@ import br.com.xmarket.Model.Usuario;
 
 @RestController
 public class UsuarioController {
-	
-	String email, senha;
 	
 	public static String getHashMd5(String value) {
         MessageDigest md;
@@ -48,16 +47,20 @@ public class UsuarioController {
 	@RequestMapping("/cadastro")
 	@PostMapping
 	public @ResponseBody ResponseEntity<Boolean> novoUsuario(@RequestBody Usuario usuario) {		
-		
-		if(validarEmail(usuario.getEmail_usuario())==false) {
-			String hash = getHashMd5(usuario.getSenha_usuario());
-			usuario.setSenha_usuario(hash);		
-			dao.save(usuario);
-			return ResponseEntity.ok(true);		
+		if(validarCpf(usuario.getCpf_usuario())==true && validarRg(usuario.getRg_usuario())==true) {
+			if(validarEmail(usuario.getEmail_usuario())==false) {
+				String hash = getHashMd5(usuario.getSenha_usuario());
+				usuario.setSenha_usuario(hash);		
+				dao.save(usuario);
+				return ResponseEntity.ok(true);		
+			}else {
+				return ResponseEntity.ok(false);	
+			}	
 		}else {
-			System.out.println("false");
-			return ResponseEntity.ok(false);	
-		}	
+			System.out.println("Usuario ja cadastrado (cpf/rg)");
+			return ResponseEntity.ok(false);
+		}
+		
 	}
 	
 	@CrossOrigin
@@ -104,6 +107,10 @@ public class UsuarioController {
 		}
 		return null;				
 	}
+
+	
+	
+	// VALIDACOES DO BANCO
 	
 	public Boolean validarEmail(String email) {
 		Boolean result=false;
@@ -133,7 +140,27 @@ public class UsuarioController {
 		return result;
 	}
 	
-	
-	
+	public Boolean validarCpf(String cpf) {
+		Boolean result=true;
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+
+		for(int i=0; i<lista.size();i++) {
+			if(lista.get(i).getCpf_usuario().equals(cpf)) {
+				result=false;
+			}
+		}
+		return result;
+	}
+	public Boolean validarRg(String rg) {
+		Boolean result=true;
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+
+		for(int i=0; i<lista.size();i++) {
+			if(lista.get(i).getRg_usuario().equals(rg)) {
+				result=false;
+			}
+		}
+		return result;
+	}
 	
 }
