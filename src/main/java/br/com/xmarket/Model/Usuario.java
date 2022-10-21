@@ -48,8 +48,6 @@ public class Usuario {
 		this.endereco_usuario = endereco_usuario;
 		this.senha_usuario = senha_usuario;
 	}
-	
-
 	public int getId_usuario() {
 		return id_usuario;
 	}
