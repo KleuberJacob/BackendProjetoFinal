@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,31 +63,52 @@ public class UsuarioController {
 	@CrossOrigin
 	@RequestMapping("/login")
 	@PostMapping
-	public @ResponseBody ResponseEntity<Boolean> validaUsuario(@RequestBody String usuario) throws ParseException {	
+	public @ResponseBody ResponseEntity<Integer> validaUsuario(@RequestBody String usuario) throws ParseException {	
 		Boolean logado=false;
 		String senha=null;
 		JSONObject json = (JSONObject) new JSONParser().parse(usuario);
 		String email= (String) json.get("tLogin");
 		if(validarEmail(email)==true) {
 			senha= getHashMd5((String) json.get("tPassword"));
-			logado = validarSenha(email, senha);	
+			logado = validarSenha(email, senha);
+			
 			System.out.println(senha);
 			System.out.println(email);
 			System.out.println(validarEmail(email));
 			System.out.println(logado);
 			if(logado == true) {
-				return ResponseEntity.ok(true);				
+				int res = buscaId(email);
+				System.out.println(res);
+				return ResponseEntity.ok(res);				
 			}else {
-				return ResponseEntity.ok(false);
+				return ResponseEntity.ok(0);
 			}
 		}
 		return null;
 	}
 	
+	@CrossOrigin
+	@RequestMapping("/addCarrinho")
+	@PostMapping
+	public @ResponseBody boolean addCarrinho(@RequestBody String usuario) throws ParseException {	
+		return true;
+	}
+	
+	public Integer buscaId(String email) {		
+		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
+
+		for(int i=0; i<lista.size();i++) {
+			if(lista.get(i).getEmail_usuario().equals(email)) {
+				return lista.get(i).getId_usuario();
+			}
+		}
+		return null;				
+	}
+	
 	public Boolean validarEmail(String email) {
 		Boolean result=false;
 		ArrayList<Usuario> lista= (ArrayList<Usuario>)(dao.findAll());
-
+		
 		for(int i=0; i<lista.size();i++) {
 			if(lista.get(i).getEmail_usuario().equals(email)) {
 				result=true;
