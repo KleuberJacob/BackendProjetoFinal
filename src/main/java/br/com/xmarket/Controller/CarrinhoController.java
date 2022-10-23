@@ -1,6 +1,7 @@
 package br.com.xmarket.Controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -8,6 +9,8 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +56,23 @@ public class CarrinhoController {
 			return ResponseEntity.badRequest().body("QUANTIDADE INVÁLIDA");
 		}
 
+	}
+	
+	@CrossOrigin
+	@GetMapping("/verificaQuantidade/{nome}")
+	public  ResponseEntity<Integer[][]> verificaQuantidade(@PathVariable String nome){
+		ArrayList<Produto> lista= (ArrayList<Produto>)(produtoDao.findAll());
+		List<List<Integer>> tamanhos = new ArrayList<List<Integer>>();
+		
+		Integer [][] quantTamanho = new Integer[8][2];
+		for(int i=0; i<lista.size();i++) {
+			if(lista.get(i).getNome_produto().equals(nome)) {
+				quantTamanho[i][0]= lista.get(i).getTamanho_produto();
+				quantTamanho[i][1]= lista.get(i).getQuantidade_produto();
+			}
+		}
+		
+		return ResponseEntity.ok(quantTamanho);
 		
 	}
 
