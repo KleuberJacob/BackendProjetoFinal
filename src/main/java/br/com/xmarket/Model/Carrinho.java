@@ -15,26 +15,24 @@ public class Carrinho {
     private int id_carrinho;
 	
 	@Column(name="id_usuario")
-	private int id_usuario;
+	private String id_usuario;
 	
 	@Column(name="codigo_produto")
 	private int codigo_produto;
 	
 	@Column(name="quantidade")
-	private int quantidade;
+	private String quantidade;
 
 	public Carrinho(){
 		super();
 	}
 
-	public Carrinho(int id_usuario, int codigo_produto, int quantidade) {
+	public Carrinho(String id_usuario, int codigo_produto, String quantidade) {
 		super();
 		this.id_usuario = id_usuario;
 		this.codigo_produto = codigo_produto;
 		this.quantidade = quantidade;
 	}
-
-
 
 	public int getId_carrinho() {
 		return id_carrinho;
@@ -44,11 +42,11 @@ public class Carrinho {
 		this.id_carrinho = id_carrinho;
 	}
 
-	public int getId_usuario() {
+	public String getId_usuario() {
 		return id_usuario;
 	}
 
-	public void setId_usuario(int id_usuario) {
+	public void setId_usuario(String id_usuario) {
 		this.id_usuario = id_usuario;
 	}
 
@@ -60,12 +58,15 @@ public class Carrinho {
 		this.codigo_produto = codigo_produto;
 	}
 
-	public int getQuantidade() {
+	public String getQuantidade() {
 		return quantidade;
 	}
 
-	public void setQuantidade(int quantidade) {
+	public void setQuantidade(String quantidade) {
 		this.quantidade = quantidade;
 	}
+
+
+
 	
 }
