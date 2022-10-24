@@ -64,7 +64,7 @@ public class CarrinhoController {
 		ArrayList<Produto> lista= (ArrayList<Produto>)(produtoDao.findAll());
 		List<List<Integer>> tamanhos = new ArrayList<List<Integer>>();
 		
-		Integer [][] quantTamanho = new Integer[8][2];
+		Integer [][] quantTamanho = new Integer[98][2];
 		for(int i=0; i<lista.size();i++) {
 			if(lista.get(i).getNome_produto().equals(nome)) {
 				quantTamanho[i][0]= lista.get(i).getTamanho_produto();
