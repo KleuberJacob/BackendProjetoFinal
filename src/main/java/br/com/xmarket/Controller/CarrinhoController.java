@@ -1,6 +1,6 @@
 package br.com.xmarket.Controller;
 
-import java.util.ArrayList;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.xmarket.DAO.CarrinhoDao;
 import br.com.xmarket.DAO.ProdutoDao;
 import br.com.xmarket.Model.Carrinho;
-import br.com.xmarket.Model.Produto;
 
 @RestController
 public class CarrinhoController {
@@ -40,13 +39,6 @@ public class CarrinhoController {
 		String nome_produto= (String) json.get("name");
 		String quantidade_produto= (String) json.get("quantidade");
 		String tamanho_produto= (String) json.get("tamanho");	
-//		String usuario= "2"; 		
-//		String nome_produto= "Nike Revolution 8";			
-//		String quantidade_produto= "3";
-//		String tamanho_produto= "37";	
-//		int usuario = Integer.parseInt((usuariostr));
-//		int quantidade_produto=  Integer.parseInt((quantidadestr)); 
-//		int tamanho_produto=  Integer.parseInt((tamanhostr));
 		
 		System.out.println(item);
 		System.out.println(json);
@@ -58,7 +50,7 @@ public class CarrinhoController {
 			carrinhoDao.save(novoProduto);
 			return ResponseEntity.ok("PRODUTO ADICIONADO");
 		}else {
-			return ResponseEntity.badRequest().body("QUANTIDADE INVÁLIDA");
+			return ResponseEntity.badRequest().body("REQUISIÇÃO INVÁLIDA");
 		}
 
 	}
@@ -66,37 +58,55 @@ public class CarrinhoController {
 	@CrossOrigin
 	@GetMapping("/verificaQuantidade/{nome}")
 	public  ResponseEntity<Integer[][]> verificaQuantidade(@PathVariable String nome){
-		ArrayList<Produto> lista= (ArrayList<Produto>)(produtoDao.findAll());
-		
-		
-		Integer [][] quantTamanho = new Integer[98][2];
-		for(int i=0; i<lista.size();i++) {
-			if(lista.get(i).getNome_produto().equals(nome)) {
-				quantTamanho[i][0]= lista.get(i).getTamanho_produto();
-				quantTamanho[i][1]= lista.get(i).getQuantidade_produto();
-			}
-		}
-		
+		Integer[][] quantTamanho = produtoDao.queryQuantTamanho(nome);
 		return ResponseEntity.ok(quantTamanho);
 		
 	}
-
+	
+	@CrossOrigin
+	@GetMapping("/produtoCarrinho/{id_usuario}")
+	public  ResponseEntity<String[][]> verificaQuantidade(@PathVariable Integer id_usuario){
+		String [][] produto = carrinhoDao.queryProdutoCarrinho(id_usuario);
+		return ResponseEntity.ok(produto);
+	}
+	
+	//TESTE DAS QUERYS, IGNORE
+//	@CrossOrigin
+//	@GetMapping("/teste/{nome}/{tamanho}")
+//	public  ResponseEntity<Boolean> teste(@PathVariable String nome, @PathVariable String tamanho){
+//		 
+//		//Integer[][] quantidade = produtoDao.queryQuantidade(nome, tamanho);
+//		if (conferirProduto(nome, tamanho, "2") == true) {
+//			System.out.println(codigoProduto);
+//			return ResponseEntity.ok(true);
+//		}else {
+//			return ResponseEntity.ok(false);
+//		}
+//		
+//	}
+	//FIM DO TESTE DAS QUERYS
+	
+	
 	
 	// consultas no banco
 	private boolean conferirProduto(String nome_produto, String tamanho,String quantidade) {
-		ArrayList<Produto> lista= (ArrayList<Produto>)(produtoDao.findAll());
 		
-		for(int i=0; i<lista.size();i++) {
-			if(lista.get(i).getNome_produto().equals(nome_produto)) {
-				if(lista.get(i).getTamanho_produto()== Integer.parseInt(tamanho)) {
-					if(lista.get(i).getQuantidade_produto()>= Integer.parseInt(quantidade)) {
-						codigoProduto = lista.get(i).getCodigo_produto();
-						return true;
-					}
+		Integer[][] validacao = produtoDao.queryQuantidade(nome_produto, tamanho);
+		try {
+			if(validacao[0][0] != null) {
+				codigoProduto= validacao[0][0];
+				if(validacao[0][1] >= Integer.parseInt(quantidade)) {
+					return true;
+				}else {
+					return false;
 				}
+			}else {
+				return false;
 			}
+		}catch(ArrayIndexOutOfBoundsException e) {
+			return false;
 		}
-		return false;	
+		
 	}
 
 	
