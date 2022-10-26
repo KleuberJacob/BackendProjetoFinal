@@ -17,6 +17,16 @@ public interface CarrinhoDao extends CrudRepository<Carrinho, Integer> {
 			+ "where id_usuario= :id_usuario", nativeQuery= true)
 	String [][] queryProdutoCarrinho(int id_usuario);
 	
+	@Query(value= "select id_carrinho, id_usuario, codigo_produto, quantidade from carrinho where id_usuario= :id_usuario "
+			+ "and codigo_produto= :codigo_produto", nativeQuery= true)
+	Carrinho queryProdutoExiste(int id_usuario, int codigo_produto);
+	
+	@Modifying
+	@Transactional
+	@Query(value= "update carrinho set quantidade= :quantidade where id_carrinho= :id_carrinho", nativeQuery=true)
+	Integer queryUpdateQuantidade(int quantidade, int id_carrinho);
+	
+	
 	@Modifying
 	@Transactional
 	@Query(value= "delete from carrinho where id_usuario= :id_usuario "

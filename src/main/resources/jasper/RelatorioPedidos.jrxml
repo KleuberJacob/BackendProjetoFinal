@@ -45,7 +45,7 @@
 		<band height="64" splitType="Stretch">
 			<image>
 				<reportElement x="10" y="6" width="79" height="39" uuid="c530f7be-5d4c-46d9-b147-0686a683706f"/>
-				<imageExpression><![CDATA["C:/Users/00787728/Desktop/Araujo/FrontProjetoFinal/ProjetoFinal/public/static/images/logo.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:\Users\00761168\Desktop\ProjetoXMarket\ProjetoFinal\public\static\images"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="120" y="10" width="330" height="30" uuid="0443333e-309c-4e02-9f81-0093f8d6cbc6"/>
