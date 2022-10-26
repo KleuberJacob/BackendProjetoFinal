@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,6 +70,21 @@ public class CarrinhoController {
 		String [][] produto = carrinhoDao.queryProdutoCarrinho(id_usuario);
 		return ResponseEntity.ok(produto);
 	}
+	
+	@CrossOrigin
+	@DeleteMapping("/deletar/{id_usuario}/{codigo_produto}")
+	public ResponseEntity<Boolean> deletar(@PathVariable int id_usuario, @PathVariable int codigo_produto){
+		try {
+			carrinhoDao.queryDeletar(id_usuario, codigo_produto);
+			return ResponseEntity.ok(true);
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			return ResponseEntity.ok(false);
+		}
+		
+	}
+	
 	
 	//TESTE DAS QUERYS, IGNORE
 //	@CrossOrigin
