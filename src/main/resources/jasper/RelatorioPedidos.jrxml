@@ -11,7 +11,7 @@
 	valor_pedido,
 	data_pedido
 	FROM
-	pedido]]>
+	xmarket.pedido]]>
 	</queryString>
 	<field name="codigo_pedido" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="codigo_pedido"/>
@@ -43,10 +43,6 @@
 	</background>
 	<pageHeader>
 		<band height="64" splitType="Stretch">
-			<image>
-				<reportElement x="10" y="6" width="79" height="39" uuid="c530f7be-5d4c-46d9-b147-0686a683706f"/>
-				<imageExpression><![CDATA["C:\Users\00761168\Desktop\ProjetoXMarket\ProjetoFinal\public\static\images"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="120" y="10" width="330" height="30" uuid="0443333e-309c-4e02-9f81-0093f8d6cbc6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -71,6 +67,10 @@
 			<line>
 				<reportElement x="-20" y="60" width="595" height="1" uuid="3704c3a0-94dd-407c-92a5-7e2d621b8559"/>
 			</line>
+			<image>
+				<reportElement x="0" y="10" width="91" height="31" uuid="5f8cb623-dbbf-44d2-b11b-b73a842fa7a8"/>
+				<imageExpression><![CDATA["C:/Users/00761168/Desktop/ProjetoXMarket/ProjetoFinal/public/static/images/logo.png"]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<columnHeader>

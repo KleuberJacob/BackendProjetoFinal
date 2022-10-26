@@ -27,6 +27,22 @@ public class CarrinhoController {
 	@Autowired
 	private CarrinhoDao carrinhoDao;
 	private int codigoProduto;
+	
+	@CrossOrigin
+	@RequestMapping("/finalizarPedido")
+	@PostMapping
+	public @ResponseBody ResponseEntity<Boolean> finalizarPedido(@RequestBody String item) throws ParseException{
+		// item: vai vir um json em forma de string com numerodopedido, id_usuario, endereco, valor_pedido
+		JSONObject json = (JSONObject) new JSONParser().parse(item);
+		String numeroPedido= (String) json.get("numeroPedido");
+		String usuario = (String) json.get("idUsuario");
+		String endereco = (String) json.get("endereco");
+		String valor = (String) json.get("total");
+		
+		return ResponseEntity.ok(true);
+		
+		
+	}
 
 	@CrossOrigin
 	@RequestMapping("/addExisteCarrinho")
