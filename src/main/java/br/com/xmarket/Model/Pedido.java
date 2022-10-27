@@ -16,7 +16,7 @@ public class Pedido {
     private int codigo_pedido;
 	
 	@Column(name="numero_pedido")
-	private String numero_pedido;
+	private Long numero_pedido;
 	
 	@Column(name="id_usuario")
 	private String id_usuario;
@@ -37,7 +37,7 @@ public class Pedido {
 		super();
 	}
 
-	public Pedido(String numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
+	public Pedido(Long numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
 			String valor_pedido) {
 		super();
 		this.numero_pedido = numero_pedido;
@@ -47,11 +47,11 @@ public class Pedido {
 		this.valor_pedido = valor_pedido;
 	}
 
-	public String getNumero_pedido() {
+	public Long getNumero_pedido() {
 		return numero_pedido;
 	}
 
-	public void setNumero_pedido(String numero_pedido) {
+	public void setNumero_pedido(Long numero_pedido) {
 		this.numero_pedido = numero_pedido;
 	}
 

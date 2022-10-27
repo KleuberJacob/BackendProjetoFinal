@@ -37,29 +37,29 @@ public class CarrinhoController {
 	private int codigoProduto;
 
 	@CrossOrigin
-	@RequestMapping("/finalizarPedido")
+	@RequestMapping("/finalizarPedido") 
 	@PostMapping
 	public @ResponseBody ResponseEntity<Boolean> finalizarPedido(@RequestBody String item) throws ParseException {
-		// item: vai vir um json em forma de string com numerodopedido, id_usuario,
-		// endereco, valor_pedido
-		JSONObject json = (JSONObject) new JSONParser().parse(item);
-		String numeroPedido = (String) json.get("numeroPedido");
-		String usuario = (String) json.get("idUsuario");
-		String endereco = (String) json.get("endereco");
-		String valor = (String) json.get("total");
-
-		String[][] produtos = carrinhoDao.queryProdutoCarrinho(Integer.parseInt(usuario));
-		int soma=0;
-		
 		try {
-			for (int i = 0; i < produtos.length; i++) {
-				itemPedidoDao.salvarItem(numeroPedido, usuario, produtos[i][0], produtos[i][5]);
-				soma += Integer.parseInt(produtos[i][5]); 
-			}
-			carrinhoDao.queryDeletarCompra(usuario);
-			
-			Pedido novoPedido = new Pedido(numeroPedido, usuario, String.valueOf(soma), endereco, valor);
-			pedidoDao.save(novoPedido);
+			// item: vai vir um json em forma de string com numerodopedido, id_usuario,
+			// endereco, valor_pedido
+			JSONObject json = (JSONObject) new JSONParser().parse(item);
+			Long numeroPedido = (Long) json.get("numPedido");
+			String usuario = (String) json.get("idUsuario");
+			String endereco = (String) json.get("endereco");
+			String valor =  (String) json.get("total");
+	
+			String[][] produtos = carrinhoDao.queryProdutoCarrinho(Integer.parseInt(usuario));
+			int soma=0;
+			 
+				for (int i = 0; i < produtos.length; i++) {
+					itemPedidoDao.salvarItem(numeroPedido, usuario, produtos[i][0], produtos[i][5]);
+					soma += Integer.parseInt(produtos[i][5]); 
+				}
+				carrinhoDao.queryDeletarCompra(usuario);  
+				
+				Pedido novoPedido = new Pedido(numeroPedido, usuario, String.valueOf(soma), endereco, valor);
+				pedidoDao.save(novoPedido);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
