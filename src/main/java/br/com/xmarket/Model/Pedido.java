@@ -30,6 +30,9 @@ public class Pedido {
 	@Column(name="valor_pedido")
 	private String valor_pedido;
 	
+//	@Column(name="data_pedido")
+//	private String data_pedido;
+	
 	public Pedido(){
 		super();
 	}
@@ -84,12 +87,21 @@ public class Pedido {
 		this.valor_pedido = valor_pedido;
 	}
 	
+//	public String getData_pedido() {
+//		return data_pedido;
+//	}
+//
+//	public void setData_pedido(String data_pedido) {
+//		this.data_pedido = data_pedido;
+//	}
+
 	public String toString() {
 		return "{"
 				+ "'numero_pedido': '"+ getNumero_pedido() +"',"
 				+ "'quant_itens': '"+ getQuantidade()+"',"
 				+ "'endereco': '"+ getEndereco_pedido()+"',"
 				+ "'valor_pedido': '"+ getValor_pedido()+"'"
+//				+ "'data_pedido': '"+ getData_pedido()+"'"
 				+ "}";
 	}
 

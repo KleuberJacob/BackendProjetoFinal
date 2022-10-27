@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.xmarket.DAO.CarrinhoDao;
+import br.com.xmarket.DAO.ItemPedidoDao;
+import br.com.xmarket.DAO.PedidoDao;
 import br.com.xmarket.DAO.ProdutoDao;
 import br.com.xmarket.Model.Carrinho;
+import br.com.xmarket.Model.Pedido;
 
 @RestController
 public class CarrinhoController {
@@ -26,52 +29,77 @@ public class CarrinhoController {
 	private ProdutoDao produtoDao;
 	@Autowired
 	private CarrinhoDao carrinhoDao;
+	@Autowired
+	private ItemPedidoDao itemPedidoDao;
+	@Autowired
+	private PedidoDao pedidoDao;
+
 	private int codigoProduto;
-	
+
 	@CrossOrigin
 	@RequestMapping("/finalizarPedido")
 	@PostMapping
-	public @ResponseBody ResponseEntity<Boolean> finalizarPedido(@RequestBody String item) throws ParseException{
-		// item: vai vir um json em forma de string com numerodopedido, id_usuario, endereco, valor_pedido
+	public @ResponseBody ResponseEntity<Boolean> finalizarPedido(@RequestBody String item) throws ParseException {
+		// item: vai vir um json em forma de string com numerodopedido, id_usuario,
+		// endereco, valor_pedido
 		JSONObject json = (JSONObject) new JSONParser().parse(item);
-		String numeroPedido= (String) json.get("numeroPedido");
+		String numeroPedido = (String) json.get("numeroPedido");
 		String usuario = (String) json.get("idUsuario");
 		String endereco = (String) json.get("endereco");
 		String valor = (String) json.get("total");
+
+		String[][] produtos = carrinhoDao.queryProdutoCarrinho(Integer.parseInt(usuario));
+		int soma=0;
 		
+		try {
+			for (int i = 0; i < produtos.length; i++) {
+				itemPedidoDao.salvarItem(numeroPedido, usuario, produtos[i][0], produtos[i][5]);
+				soma += Integer.parseInt(produtos[i][5]); 
+			}
+			carrinhoDao.queryDeletarCompra(usuario);
+			
+			Pedido novoPedido = new Pedido(numeroPedido, usuario, String.valueOf(soma), endereco, valor);
+			pedidoDao.save(novoPedido);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.ok(false);
+			
+		}
 		return ResponseEntity.ok(true);
-		
-		
+
 	}
 
 	@CrossOrigin
 	@RequestMapping("/addExisteCarrinho")
 	@PostMapping
 	public @ResponseBody ResponseEntity<Boolean> addExisteCarrinho(@RequestBody String item) throws ParseException {
-		// item : vai vir um json em forma de string com o id_usuario, nome_produto, quantidade_produto etamanho_produto
+		// item : vai vir um json em forma de string com o id_usuario, nome_produto,
+		// quantidade_produto etamanho_produto
 
 		JSONObject json = (JSONObject) new JSONParser().parse(item);
 		String usuario = (String) json.get("idUsuario");
 		String nome_produto = (String) json.get("name");
 		String quantidade_produto = (String) json.get("quantidade");
 		String tamanho_produto = (String) json.get("tamanho");
-		
+
 		if (conferirProduto(nome_produto, tamanho_produto, quantidade_produto)) {
 			Carrinho carrinhoExistente = carrinhoDao.queryProdutoExiste(Integer.parseInt(usuario), codigoProduto);
-			if(carrinhoExistente == null) {
+			if (carrinhoExistente == null) {
 				return ResponseEntity.ok(false);
-			}else {
-				int quantidadeFinal= Integer.parseInt(carrinhoExistente.getQuantidade()) + Integer.parseInt(quantidade_produto);
-				carrinhoExistente.setQuantidade( String.valueOf(quantidadeFinal));
-				Integer update = carrinhoDao.queryUpdateQuantidade(Integer.parseInt(carrinhoExistente.getQuantidade()), carrinhoExistente.getId_carrinho());
+			} else {
+				int quantidadeFinal = Integer.parseInt(carrinhoExistente.getQuantidade())
+						+ Integer.parseInt(quantidade_produto);
+				carrinhoExistente.setQuantidade(String.valueOf(quantidadeFinal));
+				Integer update = carrinhoDao.queryUpdateQuantidade(Integer.parseInt(carrinhoExistente.getQuantidade()),
+						carrinhoExistente.getId_carrinho());
 				return ResponseEntity.ok(true);
 			}
-		}else {
+		} else {
 			return ResponseEntity.badRequest().body(false);
 		}
-		
+
 	}
-	
 
 	@CrossOrigin
 	@RequestMapping("/addCarrinho")
@@ -129,8 +157,6 @@ public class CarrinhoController {
 		}
 
 	}
-
-
 
 	// consultas no banco
 	private boolean conferirProduto(String nome_produto, String tamanho, String quantidade) {
