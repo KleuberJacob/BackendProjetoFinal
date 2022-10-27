@@ -53,7 +53,7 @@ public class UsuarioController {
 		if (validarCpf(usuario.getCpf_usuario()) == true && validarRg(usuario.getRg_usuario()) == true) {
 			if (validarEmail(usuario.getEmail_usuario()) == false) {
 				String hash = getHashMd5(usuario.getSenha_usuario());
-				usuario.setSenha_usuario(hash);
+				usuario.setSenha_usuario(hash); 
 				usuarioDao.save(usuario);
 				return ResponseEntity.ok(true);
 			} else {

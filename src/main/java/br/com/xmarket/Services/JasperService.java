@@ -23,7 +23,7 @@ public class JasperService {
 		public String pdf() {
 			System.out.println("Inicio");
 			JasperService geraRelatorio = new JasperService();
-			String path = "C:\\Users\\00787728\\Desktop\\Araujo\\BackProjetoFinal\\BackendProjetoFinal\\src\\main\\resources\\jasper\\";
+			String path = "C:\\Users\\00761168\\Desktop\\ProjetoXMarket\\BackendProjetoFinal\\src\\main\\resources\\jasper\\";
 			geraRelatorio.gerarPDF(path);
 			System.out.println("Fim");
 			return path;
