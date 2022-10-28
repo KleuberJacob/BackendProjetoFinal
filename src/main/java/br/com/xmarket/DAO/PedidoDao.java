@@ -23,4 +23,7 @@ public interface PedidoDao extends CrudRepository<Pedido, Integer> {
 	@Query(value = "select p.data_pedido from pedido p", nativeQuery = true)
 	List<String> findDataFinal();
 	
+	@Query(value= "select * from pedido where id_usuario like :id_usuario", nativeQuery= true)
+	String [][] querybuscapedido(int id_usuario);
+	
 }
