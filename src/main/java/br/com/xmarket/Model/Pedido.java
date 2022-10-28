@@ -1,7 +1,5 @@
 package br.com.xmarket.Model;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

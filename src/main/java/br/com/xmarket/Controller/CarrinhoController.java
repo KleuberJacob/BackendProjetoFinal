@@ -39,7 +39,7 @@ public class CarrinhoController {
 	@CrossOrigin
 	@RequestMapping("/finalizarPedido") 
 	@PostMapping
-	public @ResponseBody ResponseEntity<Boolean> finalizarPedido(@RequestBody String item) throws ParseException {
+	public @ResponseBody ResponseEntity<Integer> finalizarPedido(@RequestBody String item) throws ParseException {
 		try {
 			// item: vai vir um json em forma de string com numerodopedido, id_usuario,
 			// endereco, valor_pedido
@@ -47,26 +47,33 @@ public class CarrinhoController {
 			Long numeroPedido = (Long) json.get("numPedido");
 			String usuario = (String) json.get("idUsuario");
 			String endereco = (String) json.get("endereco");
-			String valor =  (String) json.get("total");
+			String valor = (String) json.get("total");
 	
 			String[][] produtos = carrinhoDao.queryProdutoCarrinho(Integer.parseInt(usuario));
 			int soma=0;
-			 
+			
 				for (int i = 0; i < produtos.length; i++) {
-					itemPedidoDao.salvarItem(numeroPedido, usuario, produtos[i][0], produtos[i][5]);
-					soma += Integer.parseInt(produtos[i][5]); 
+					if(conferirProduto(produtos[i][1], produtos[i][3], produtos[i][5])) {
+						itemPedidoDao.salvarItem(numeroPedido, usuario, produtos[i][0], produtos[i][5]);
+						produtoDao.queryAtualizarQuantidade(produtos[i][5], produtos[i][0]);
+						soma += Integer.parseInt(produtos[i][5]);
+					}else {
+						return ResponseEntity.ok(2);
+					}
+						
 				}
-				carrinhoDao.queryDeletarCompra(usuario);  
+				carrinhoDao.queryDeletarCompra(usuario);
 				
 				Pedido novoPedido = new Pedido(numeroPedido, usuario, String.valueOf(soma), endereco, valor);
 				pedidoDao.save(novoPedido);
+
 			
 		}catch(Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(false);
+			return ResponseEntity.ok(1);
 			
 		}
-		return ResponseEntity.ok(true);
+		return ResponseEntity.ok(0);
 
 	}
 
