@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.xmarket.DAO.PedidoDao;
@@ -29,42 +28,27 @@ public class JasperController {
 	private JasperService service;
 	
 	@CrossOrigin
-	@GetMapping("/report/{code}/{acao}")
-	public void exibirRelatorio01(@PathVariable("code") String code, @PathVariable("acao") String acao,
-			HttpServletResponse response) throws IOException { // resposta em relaçao a nossa requisição, não retornando
-																// nada
-
-		byte[] bytes = service.exportarPDF(code); // meu relatorio sera transformado em uma array e sera retornado para
-													// bytes
-
-		response.setContentType(MediaType.APPLICATION_PDF_VALUE); // vai receber o tipo de midia, nesse caso o PDF
-		if (acao.equals("v")) {
-			// inline:fala com navegador que o pdf será aberto por ele,senão o navegador não
-			// for compativel será feito download
-
-			response.setHeader("Content-disposition", "inline;filename=relatorio-" + code + ".pdf");
-		} else {
-			// attachment: fala para o navegador que não deseja abrir o relatorio, mas quer
-			// salvar em algum diretorio
-			response.setHeader("Content-disposition", "attachment;filename=relatorio-" + code + ".pdf");
-		}
+	@GetMapping("/report/{code}")
+	public void exibirRelatorio01(@PathVariable("code") String code, HttpServletResponse response) throws IOException {
+		byte[] bytes = service.exportarPDF(code);
+		response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+		response.setHeader("Content-disposition", "inline;filename=relatorio-" + code + ".pdf");
 		response.getOutputStream().write(bytes);
 	}
 	
 	@CrossOrigin
-	@GetMapping("/reportFiltered/{code}/{data_inicio}/{data_final}")
-    public void exibirRelatorio02(@PathVariable("code") String code,     //pathvariable recebe o parametro a partir da url
-    		@PathVariable("data_inicio") Date data_inicio,    //coloco required false, porque não é obrigatório para fazer busca no 09
-    		@PathVariable("data_final") Date data_final,
-            HttpServletResponse response) throws IOException { //resposta em relaçao a nossa requisição, não retornando nada
-
-        service.addParams("dataInicial", data_inicio);  //como é string deve mandar essa condição para a string não chegar vazio
+	@GetMapping("/report/{code}/{data_inicio}/{data_final}")
+    public void exibirRelatorio02(@PathVariable("code") String code, 
+    							  @PathVariable("data_inicio") Date data_inicio, 
+    							  @PathVariable("data_final") Date data_final, 
+    							  HttpServletResponse response) throws IOException {
+        service.addParams("dataInicial", data_inicio);
         service.addParams("dataFinal", data_final);
-        byte[] bytes = service.exportarPDF(code);  // meu relatorio sera transformado em uma array e sera retornado para bytes
+        byte[] bytes = service.exportarPDF(code);
         response.setHeader("Content-disposition","inline;filename=relatorio-"+code+".pdf"); 
-        response.setContentType(MediaType.APPLICATION_PDF_VALUE); //vai receber o tipo de midia, nesse caso o PDF
+        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.getOutputStream().write(bytes);
-            }
+    }
 
 
     //MEtodos responsaveis por preencher a lista 

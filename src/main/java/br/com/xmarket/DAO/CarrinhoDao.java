@@ -32,5 +32,10 @@ public interface CarrinhoDao extends CrudRepository<Carrinho, Integer> {
 	@Query(value= "delete from carrinho where id_usuario= :id_usuario "
 			+"and codigo_produto= :codigo_produto", nativeQuery= true)
 	Integer queryDeletar(int id_usuario, int codigo_produto);
+	
+	@Modifying
+	@Transactional
+	@Query(value= "delete from carrinho where id_usuario= :id_usuario ", nativeQuery= true)
+	Integer queryDeletarCompra(String id_usuario);
 
 }

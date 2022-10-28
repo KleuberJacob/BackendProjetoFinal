@@ -18,7 +18,7 @@ public class Pedido {
     private int codigo_pedido;
 	
 	@Column(name="numero_pedido")
-	private String numero_pedido;
+	private Long numero_pedido;
 	
 	@Column(name="id_usuario")
 	private String id_usuario;
@@ -39,7 +39,7 @@ public class Pedido {
 		super();
 	}
 
-	public Pedido(String numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
+	public Pedido(Long numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
 			String valor_pedido, LocalDate data_pedido) {
 		super();
 		this.numero_pedido = numero_pedido;
@@ -50,6 +50,16 @@ public class Pedido {
 		this.data_pedido = data_pedido;
 	}
 
+	public Pedido(Long numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
+			String valor_pedido) {
+		super();
+		this.numero_pedido = numero_pedido;
+		this.id_usuario = id_usuario;
+		this.quantidade = quantidade;
+		this.endereco_pedido = endereco_pedido;
+		this.valor_pedido = valor_pedido;
+	}
+
 	public LocalDate getData_pedido() {
 		return data_pedido;
 	}
@@ -58,11 +68,11 @@ public class Pedido {
 		this.data_pedido = data_pedido;
 	}
 
-	public String getNumero_pedido() {
+	public Long getNumero_pedido() {
 		return numero_pedido;
 	}
 
-	public void setNumero_pedido(String numero_pedido) {
+	public void setNumero_pedido(Long numero_pedido) {
 		this.numero_pedido = numero_pedido;
 	}
 
@@ -97,14 +107,15 @@ public class Pedido {
 	public void setValor_pedido(String valor_pedido) {
 		this.valor_pedido = valor_pedido;
 	}
-	
-	public String toString() {
-		return "{"
-				+ "'numero_pedido': '"+ getNumero_pedido() +"',"
-				+ "'quant_itens': '"+ getQuantidade()+"',"
-				+ "'endereco': '"+ getEndereco_pedido()+"',"
-				+ "'valor_pedido': '"+ getValor_pedido()+"'"
-				+ "}";
-	}
+
+//	public String toString() {
+//		return "{"
+//				+ "'numero_pedido': '"+ getNumero_pedido() +"',"
+//				+ "'quant_itens': '"+ getQuantidade()+"',"
+//				+ "'endereco': '"+ getEndereco_pedido()+"',"
+//				+ "'valor_pedido': '"+ getValor_pedido()+"'"
+//				+ "'data_pedido': '"+ getData_pedido()+"'"
+//				+ "}";
+//	}
 
 }
