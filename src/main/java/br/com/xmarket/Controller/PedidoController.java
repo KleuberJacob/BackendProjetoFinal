@@ -39,11 +39,12 @@ public class PedidoController {
 
 	@CrossOrigin
 	@GetMapping("/dadospedido/{id_usuario}")
+	
 	public ResponseEntity<String[][]> puxarPedidos(@PathVariable int id_usuario) throws ParseException {
 
 		String[][] pedidos = pedidoDao.querybuscapedido(id_usuario);
 		if (pedidos != null) {
-			System.out.println("teste");
+			
 			return ResponseEntity.ok(pedidos);
 		} else {
 			System.out.println(pedidos);
