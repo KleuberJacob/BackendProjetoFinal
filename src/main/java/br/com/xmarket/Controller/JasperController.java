@@ -29,15 +29,16 @@ public class JasperController {
 	
 	@CrossOrigin
 	@GetMapping("/report/{code}")
-	public void exibirRelatorio01(@PathVariable("code") String code, HttpServletResponse response) throws IOException {
+	public void exibirRelatorio01(@PathVariable("code") String code,
+								  HttpServletResponse response) throws IOException {
 		byte[] bytes = service.exportarPDF(code);
 		response.setContentType(MediaType.APPLICATION_PDF_VALUE);
-		response.setHeader("Content-disposition", "inline;filename=relatorio-" + code + ".pdf");
-		response.getOutputStream().write(bytes);
+        response.setHeader("Content-disposition","inline;filename=relatorio-"+code+".pdf");
+        response.getOutputStream().write(bytes);
 	}
 	
 	@CrossOrigin
-	@GetMapping("/report/{code}/{data_inicio}/{data_final}")
+	@GetMapping("/reportFilter/{code}/{data_inicio}/{data_final}")
     public void exibirRelatorio02(@PathVariable("code") String code, 
     							  @PathVariable("data_inicio") Date data_inicio, 
     							  @PathVariable("data_final") Date data_final, 
@@ -51,7 +52,6 @@ public class JasperController {
     }
 
 
-    //MEtodos responsaveis por preencher a lista 
     @ModelAttribute("data_inicio")
     public List <String> getDataInicio(){
         return pedido.findDataInicio();

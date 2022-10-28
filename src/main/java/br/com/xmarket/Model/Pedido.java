@@ -32,23 +32,23 @@ public class Pedido {
 	@Column(name="valor_pedido")
 	private String valor_pedido;
 	
-	@Column(name="data_pedido")
-	private LocalDate data_pedido;
+//	@Column(name="data_pedido")
+//	private LocalDate data_pedido;
 
 	public Pedido(){
 		super();
 	}
 
-	public Pedido(Long numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
-			String valor_pedido, LocalDate data_pedido) {
-		super();
-		this.numero_pedido = numero_pedido;
-		this.id_usuario = id_usuario;
-		this.quantidade = quantidade;
-		this.endereco_pedido = endereco_pedido;
-		this.valor_pedido = valor_pedido;
-		this.data_pedido = data_pedido;
-	}
+//	public Pedido(Long numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
+//			String valor_pedido, LocalDate data_pedido) {
+//		super();
+//		this.numero_pedido = numero_pedido;
+//		this.id_usuario = id_usuario;
+//		this.quantidade = quantidade;
+//		this.endereco_pedido = endereco_pedido;
+//		this.valor_pedido = valor_pedido;
+//		this.data_pedido = data_pedido;
+//	}
 
 	public Pedido(Long numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
 			String valor_pedido) {
@@ -60,13 +60,13 @@ public class Pedido {
 		this.valor_pedido = valor_pedido;
 	}
 
-	public LocalDate getData_pedido() {
-		return data_pedido;
-	}
-
-	public void setData_pedido(LocalDate data_pedido) {
-		this.data_pedido = data_pedido;
-	}
+//	public LocalDate getData_pedido() {
+//		return data_pedido;
+//	}
+//
+//	public void setData_pedido(LocalDate data_pedido) {
+//		this.data_pedido = data_pedido;
+//	}
 
 	public Long getNumero_pedido() {
 		return numero_pedido;

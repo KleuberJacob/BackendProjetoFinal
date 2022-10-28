@@ -35,16 +35,14 @@ import net.sf.jasperreports.engine.JasperPrint;
 	@Service
 	public class JasperService {
 
-	    //caminho para localizar meus relatorios
 	    private static final String JASPER_DIRETORIO = "classpath:jasper/";
-	    private static final String JASPER_PREFIXO = "RelatorioPedidos_";    //Prefixo será os nomes iniciais do relatorio
-	    private static final String JASPER_SUFIXO = ".jasper";  //sera a extensao do arquivo
+	    private static final String JASPER_PREFIXO = "RelatorioPedidos_";
+	    private static final String JASPER_SUFIXO = ".jasper";
 
 
 	    @Autowired
 	    private Connection connection;
 
-	    //Metodos para os parametros
 	    private Map<String, Object> params = new HashMap<>();
 
 
@@ -52,12 +50,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 	        this.params.put(key, value);
 	    }
 
-	    //Metodo para gerar o relatorio
 	    public byte [] exportarPDF(String code) {
+	    	System.out.println("exportar pdf");
 	        byte[] bytes = null;
 	        try {
 	            File file = ResourceUtils.getFile(JASPER_DIRETORIO.concat(JASPER_PREFIXO).concat(code).concat(JASPER_SUFIXO));
-	            JasperPrint print = JasperFillManager.fillReport(file.getAbsolutePath(),params,connection); //acessando o relatorio
+	            JasperPrint print = JasperFillManager.fillReport(file.getAbsolutePath(),params,connection);
 	            bytes = JasperExportManager.exportReportToPdf(print);
 	        } catch (FileNotFoundException  | JRException e) {
 	            e.printStackTrace();
