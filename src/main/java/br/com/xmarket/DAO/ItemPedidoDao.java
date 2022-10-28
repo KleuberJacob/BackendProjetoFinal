@@ -17,7 +17,7 @@ public interface ItemPedidoDao extends CrudRepository<Item_Pedido, Integer> {
 			+ "(codigo_pedido, id_usuario, codigo_produto, quantidade_item)\r\n"
 			+ "values\r\n"
 			+ "(:numeroPedido , :id_usuario , :codigo_produto , :quantidade)" , nativeQuery= true)
-	Integer salvarItem(String numeroPedido, String id_usuario, String codigo_produto, String quantidade);
+	Integer salvarItem(Long numeroPedido, String id_usuario, String codigo_produto, String quantidade);
 	
 	
 
