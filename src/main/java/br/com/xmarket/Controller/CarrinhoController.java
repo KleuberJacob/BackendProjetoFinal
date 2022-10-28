@@ -39,7 +39,7 @@ public class CarrinhoController {
 	@CrossOrigin
 	@RequestMapping("/finalizarPedido")
 	@PostMapping
-	public @ResponseBody ResponseEntity<Boolean> finalizarPedido(@RequestBody String item) throws ParseException {
+	public @ResponseBody ResponseEntity<Integer> finalizarPedido(@RequestBody String item) throws ParseException {
 		// item: vai vir um json em forma de string com numerodopedido, id_usuario,
 		// endereco, valor_pedido
 		JSONObject json = (JSONObject) new JSONParser().parse(item);
@@ -53,8 +53,14 @@ public class CarrinhoController {
 		
 		try {
 			for (int i = 0; i < produtos.length; i++) {
-				itemPedidoDao.salvarItem(numeroPedido, usuario, produtos[i][0], produtos[i][5]);
-				soma += Integer.parseInt(produtos[i][5]); 
+				if(conferirProduto(produtos[i][1], produtos[i][3], produtos[i][5])) {
+					itemPedidoDao.salvarItem(numeroPedido, usuario, produtos[i][0], produtos[i][5]);
+					produtoDao.queryAtualizarQuantidade(produtos[i][5], produtos[i][0]);
+					soma += Integer.parseInt(produtos[i][5]);
+				}else {
+					return ResponseEntity.ok(2);
+				}
+					
 			}
 			carrinhoDao.queryDeletarCompra(usuario);
 			
@@ -63,10 +69,10 @@ public class CarrinhoController {
 			
 		}catch(Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(false);
+			return ResponseEntity.ok(1);
 			
 		}
-		return ResponseEntity.ok(true);
+		return ResponseEntity.ok(0);
 
 	}
 
