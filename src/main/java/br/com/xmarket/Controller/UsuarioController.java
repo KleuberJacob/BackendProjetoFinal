@@ -1,20 +1,14 @@
 package br.com.xmarket.Controller;
 
 import java.math.BigInteger;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 
-//import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
-
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.xmarket.DAO.UsuarioDao;
 import br.com.xmarket.Model.Usuario;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class UsuarioController {
 
 	public static String getHashMd5(String value) {
@@ -46,9 +43,8 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioDao usuarioDao;
 
-	@CrossOrigin
-	@RequestMapping("/cadastro")
-	@PostMapping
+	@PostMapping("/cadastro")
+	@Operation(summary = "Cadastro de novo usuário.")
 	public @ResponseBody ResponseEntity<Boolean> novoUsuario(@RequestBody Usuario usuario) {
 		if (validarCpf(usuario.getCpf_usuario()) == true && validarRg(usuario.getRg_usuario()) == true) {
 			if (validarEmail(usuario.getEmail_usuario()) == false) {
@@ -60,15 +56,12 @@ public class UsuarioController {
 				return ResponseEntity.ok(false);
 			}
 		} else {
-			System.out.println("Usuario ja cadastrado (cpf/rg)");
 			return ResponseEntity.ok(false);
 		}
-
 	}
 
-	@CrossOrigin
-	@RequestMapping("/login")
-	@PostMapping
+	@PostMapping("/login")
+	@Operation(summary = "Validação do login do usuário.")
 	public @ResponseBody ResponseEntity<Integer> validaUsuario(@RequestBody String usuario) throws ParseException {
 		Boolean logado = false;
 		String senha = null;
@@ -79,8 +72,7 @@ public class UsuarioController {
 			logado = validarSenha(email, senha);
 
 			if (logado == true) {
-				int res = buscaId(email);
-				System.out.println(res);
+				int res = buscaId(email);				
 				return ResponseEntity.ok(res);
 			} else {
 				return ResponseEntity.ok(0);
@@ -89,8 +81,8 @@ public class UsuarioController {
 		return null;
 	}
 
-	@CrossOrigin
 	@GetMapping("/dados/{id_usuario}")
+	@Operation(summary = "Pega todos os dados do usuário.")
 	public ResponseEntity<Usuario> puxarDados(@PathVariable int id_usuario) throws ParseException {
 
 		Usuario usuario = usuarioDao.findById(id_usuario).orElse(null);
@@ -101,8 +93,8 @@ public class UsuarioController {
 		}
 	}
 
-	@CrossOrigin
 	@PutMapping("/alteracao/{id_usuario}")
+	@Operation(summary = "Alteração dos dados do usuário.")
 	public @ResponseBody ResponseEntity<Boolean> alterarDados(@PathVariable int id_usuario,
 			@RequestBody Usuario newUsuario) {
 
@@ -112,24 +104,9 @@ public class UsuarioController {
 		oldUsuario.setEndereco_usuario(newUsuario.getEndereco_usuario());
 		oldUsuario.setTelefone_usuario(newUsuario.getTelefone_usuario());
 		usuarioDao.save(oldUsuario);
-		System.out.println(oldUsuario);
+		
 		return ResponseEntity.ok(true);
 	}
-
-	// teste das querys, ignore
-	@CrossOrigin
-	@GetMapping("/teste2/{email}")
-//	public ResponseEntity<Boolean> teste(@PathVariable String email) {
-//
-//		Usuario usuario= usuarioDao.queryValidarEmail(email);
-//		return ResponseEntity.ok(usuario);
-//		if (validarEmail(email) == true) {
-//			return ResponseEntity.ok(true);
-//		} else {
-//			return ResponseEntity.ok(false);
-//		}
-//	}
-	// fim dos testes das querys
 
 	public Integer buscaId(String email) {
 		ArrayList<Usuario> lista = (ArrayList<Usuario>) (usuarioDao.findAll());
@@ -143,16 +120,13 @@ public class UsuarioController {
 	}
 
 	// VALIDACOES DO BANCO
-
 	public Boolean validarEmail(String email) {
-
 		Usuario usuario = usuarioDao.queryValidarEmail(email);
 		if (usuario != null) {
 			return true;
 		} else {
 			return false;
 		}
-
 	}
 
 	public Boolean validarSenha(String email, String senha) {
@@ -187,5 +161,4 @@ public class UsuarioController {
 		}
 		return result;
 	}
-
 }

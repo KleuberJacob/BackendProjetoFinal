@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.xmarket.DAO.PedidoDao;
 import br.com.xmarket.Services.JasperService;
 
 @RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class JasperController {
 
 	@Autowired
@@ -26,18 +29,15 @@ public class JasperController {
 	
 	@Autowired
 	private JasperService service;
-	
-	@CrossOrigin
+
 	@GetMapping("/report/{code}")
-	public void exibirRelatorio01(@PathVariable("code") String code,
-								  HttpServletResponse response) throws IOException {
+	public void exibirRelatorio01(@PathVariable("code") String code, HttpServletResponse response) throws IOException {
 		byte[] bytes = service.exportarPDF(code);
 		response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.setHeader("Content-disposition","inline;filename=relatorio-"+code+".pdf");
         response.getOutputStream().write(bytes);
 	}
-	
-	@CrossOrigin
+
 	@GetMapping("/reportFilter/{code}/{data_inicio}/{data_final}")
     public void exibirRelatorio02(@PathVariable("code") String code, 
     							  @PathVariable("data_inicio") Date data_inicio, 
@@ -50,7 +50,6 @@ public class JasperController {
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         response.getOutputStream().write(bytes);
     }
-
 
     @ModelAttribute("data_inicio")
     public List <String> getDataInicio(){

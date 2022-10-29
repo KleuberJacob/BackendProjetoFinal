@@ -21,8 +21,11 @@ import br.com.xmarket.DAO.PedidoDao;
 import br.com.xmarket.DAO.ProdutoDao;
 import br.com.xmarket.Model.Carrinho;
 import br.com.xmarket.Model.Pedido;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class CarrinhoController {
 
 	@Autowired
@@ -36,13 +39,10 @@ public class CarrinhoController {
 
 	private int codigoProduto;
 
-	@CrossOrigin
-	@RequestMapping("/finalizarPedido") 
-	@PostMapping
+	@PostMapping("/finalizarPedido") 
+	@Operation(summary = "Finalizar Pedido")
 	public @ResponseBody ResponseEntity<Integer> finalizarPedido(@RequestBody String item) throws ParseException {
-		try {
-			// item: vai vir um json em forma de string com numerodopedido, id_usuario,
-			// endereco, valor_pedido
+		try {		
 			JSONObject json = (JSONObject) new JSONParser().parse(item);
 			Long numeroPedido = (Long) json.get("numPedido");
 			String usuario = (String) json.get("idUsuario");
@@ -59,31 +59,22 @@ public class CarrinhoController {
 						soma += Integer.parseInt(produtos[i][5]);
 					}else {
 						return ResponseEntity.ok(2);
-					}
-						
+					}						
 				}
-				carrinhoDao.queryDeletarCompra(usuario);
-				
+				carrinhoDao.queryDeletarCompra(usuario);				
 				Pedido novoPedido = new Pedido(numeroPedido, usuario, String.valueOf(soma), endereco, valor);
-				pedidoDao.save(novoPedido);
-
-			
+				pedidoDao.save(novoPedido);			
 		}catch(Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.ok(1);
-			
+			return ResponseEntity.ok(1);			
 		}
 		return ResponseEntity.ok(0);
-
 	}
 
-	@CrossOrigin
-	@RequestMapping("/addExisteCarrinho")
-	@PostMapping
+	@PostMapping("/addExisteCarrinho")
+	@Operation(summary = "Valida não duplicidade de produtos no carrinho de compras")
 	public @ResponseBody ResponseEntity<Boolean> addExisteCarrinho(@RequestBody String item) throws ParseException {
-		// item : vai vir um json em forma de string com o id_usuario, nome_produto,
-		// quantidade_produto etamanho_produto
-
+		
 		JSONObject json = (JSONObject) new JSONParser().parse(item);
 		String usuario = (String) json.get("idUsuario");
 		String nome_produto = (String) json.get("name");
@@ -108,64 +99,50 @@ public class CarrinhoController {
 
 	}
 
-	@CrossOrigin
-	@RequestMapping("/addCarrinho")
-	@PostMapping
+	@PostMapping("/addCarrinho")
+	@Operation(summary = "Inseri produto no carrinho de compras")
 	public @ResponseBody ResponseEntity<String> addCarrinho(@RequestBody String item) throws ParseException {
-		// item : vai vir um json em forma de string com o id_usuario, nome_produto,
-		// quantidade_produto etamanho_produto
-
+		
 		JSONObject json = (JSONObject) new JSONParser().parse(item);
 		String usuario = (String) json.get("idUsuario");
 		String nome_produto = (String) json.get("name");
 		String quantidade_produto = (String) json.get("quantidade");
-		String tamanho_produto = (String) json.get("tamanho");
+		String tamanho_produto = (String) json.get("tamanho");		
 
-		System.out.println(item);
-		System.out.println(json);
-		System.out.println(usuario + nome_produto + quantidade_produto + tamanho_produto);
-
-		if (conferirProduto(nome_produto, tamanho_produto, quantidade_produto)) {
-			System.out.println(codigoProduto);
+		if (conferirProduto(nome_produto, tamanho_produto, quantidade_produto)) {			
 			Carrinho novoProduto = new Carrinho(usuario, codigoProduto, quantidade_produto);
 			carrinhoDao.save(novoProduto);
 			return ResponseEntity.ok("PRODUTO ADICIONADO");
 		} else {
 			return ResponseEntity.badRequest().body("REQUISIÇÃO INVÁLIDA");
 		}
-
 	}
 
-	@CrossOrigin
 	@GetMapping("/verificaQuantidade/{nome}")
+	@Operation(summary = "Verifica tamanho e quantidade de um produto.")
 	public ResponseEntity<Integer[][]> verificaQuantidade(@PathVariable String nome) {
 		Integer[][] quantTamanho = produtoDao.queryQuantTamanho(nome);
 		return ResponseEntity.ok(quantTamanho);
-
 	}
 
-	@CrossOrigin
 	@GetMapping("/produtoCarrinho/{id_usuario}")
+	@Operation(summary = "Pega todos os produtos presentes no carrinho do usuário.")
 	public ResponseEntity<String[][]> verificaQuantidade(@PathVariable Integer id_usuario) {
 		String[][] produto = carrinhoDao.queryProdutoCarrinho(id_usuario);
 		return ResponseEntity.ok(produto);
 	}
 
-	@CrossOrigin
 	@DeleteMapping("/deletar/{id_usuario}/{codigo_produto}")
+	@Operation(summary = "Exclui o produto presente no carrinho do usuário.")
 	public ResponseEntity<Boolean> deletar(@PathVariable int id_usuario, @PathVariable int codigo_produto) {
 		try {
 			carrinhoDao.queryDeletar(id_usuario, codigo_produto);
 			return ResponseEntity.ok(true);
-
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			return ResponseEntity.ok(false);
 		}
-
 	}
 
-	// consultas no banco
 	private boolean conferirProduto(String nome_produto, String tamanho, String quantidade) {
 
 		Integer[][] validacao = produtoDao.queryQuantidade(nome_produto, tamanho);
@@ -183,7 +160,6 @@ public class CarrinhoController {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
-
 	}
 
 }
