@@ -30,6 +30,9 @@ public class Pedido {
 	@Column(name="valor_pedido")
 	private String valor_pedido;
 	
+	@Column(name="observacao_pedido")
+	private String observacao_pedido;
+	
 //	@Column(name="data_pedido")
 //	private LocalDate data_pedido;
 
@@ -49,13 +52,14 @@ public class Pedido {
 //	}
 
 	public Pedido(Long numero_pedido, String id_usuario, String quantidade, String endereco_pedido,
-			String valor_pedido) {
+			String valor_pedido, String observacao_pedido) {
 		super();
 		this.numero_pedido = numero_pedido;
 		this.id_usuario = id_usuario;
 		this.quantidade = quantidade;
 		this.endereco_pedido = endereco_pedido;
 		this.valor_pedido = valor_pedido;
+		this.observacao_pedido= observacao_pedido;
 	}
 
 //	public LocalDate getData_pedido() {
@@ -105,6 +109,16 @@ public class Pedido {
 	public void setValor_pedido(String valor_pedido) {
 		this.valor_pedido = valor_pedido;
 	}
+
+	public String getObservacao_pedido() {
+		return observacao_pedido;
+	}
+
+	public void setObservacao_pedido(String observacao_pedido) {
+		this.observacao_pedido = observacao_pedido;
+	}
+	
+	
 
 //	public String toString() {
 //		return "{"

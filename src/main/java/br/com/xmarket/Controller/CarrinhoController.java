@@ -48,6 +48,7 @@ public class CarrinhoController {
 			String usuario = (String) json.get("idUsuario");
 			String endereco = (String) json.get("endereco");
 			String valor = (String) json.get("total");
+			String observacao= (String) json.get("observacao");
 	
 			String[][] produtos = carrinhoDao.queryProdutoCarrinho(Integer.parseInt(usuario));
 			int soma=0;
@@ -62,7 +63,7 @@ public class CarrinhoController {
 					}						
 				}
 				carrinhoDao.queryDeletarCompra(usuario);				
-				Pedido novoPedido = new Pedido(numeroPedido, usuario, String.valueOf(soma), endereco, valor);
+				Pedido novoPedido = new Pedido(numeroPedido, usuario, String.valueOf(soma), endereco, valor, observacao);
 				pedidoDao.save(novoPedido);			
 		}catch(Exception e) {
 			e.printStackTrace();
