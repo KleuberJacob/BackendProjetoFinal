@@ -32,6 +32,9 @@ public class Produto {
 	@Column(name="imagem_produto")
 	private String imagem_produto;
 
+	public Produto(){
+		super();
+	}
 
 	public Produto(String nome_produto, String tipo_produto, String descricao_produto, String preco_produto, String tamanho_produto,
 			String quantidade_produto, String imagem_produto) {
