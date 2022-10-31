@@ -98,14 +98,19 @@ public class UsuarioController {
 	public @ResponseBody ResponseEntity<Boolean> alterarDados(@PathVariable int id_usuario,
 			@RequestBody Usuario newUsuario) {
 
-		Usuario oldUsuario = usuarioDao.findById(id_usuario).get();
-		oldUsuario.setNome_usuario(newUsuario.getNome_usuario());
-		oldUsuario.setEmail_usuario(newUsuario.getEmail_usuario());
-		oldUsuario.setEndereco_usuario(newUsuario.getEndereco_usuario());
-		oldUsuario.setTelefone_usuario(newUsuario.getTelefone_usuario());
-		usuarioDao.save(oldUsuario);
+		if(validarEmail(newUsuario.getEmail_usuario()) == true) {
+			return ResponseEntity.ok(false);
+		}else {
+			Usuario oldUsuario = usuarioDao.findById(id_usuario).get();
+			oldUsuario.setNome_usuario(newUsuario.getNome_usuario());
+			oldUsuario.setEmail_usuario(newUsuario.getEmail_usuario());
+			oldUsuario.setEndereco_usuario(newUsuario.getEndereco_usuario());
+			oldUsuario.setTelefone_usuario(newUsuario.getTelefone_usuario());
+			usuarioDao.save(oldUsuario);
+			
+			return ResponseEntity.ok(true);
+		}
 		
-		return ResponseEntity.ok(true);
 	}
 
 	public Integer buscaId(String email) {
