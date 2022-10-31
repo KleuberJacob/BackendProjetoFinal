@@ -37,12 +37,13 @@ public class ProdutoController {
 		String tamanho = (String) json.get("tamanho");
 		String quantidade = (String) json.get("quantidade");
 		String imagem = (String) json.get("imagem");
+		String unico = (String) json.get("unico");
 
 		try {
 			String idProdutoBanco = produtoDao.queryAcharProduto(nome, tamanho);
 
 			if (idProdutoBanco == null) {
-				Produto produto = new Produto(nome, tipo, descricao,  preco, tamanho, quantidade, imagem);
+				Produto produto = new Produto(nome, tipo, descricao,  preco, tamanho, quantidade, imagem, unico);
 				produtoDao.save(produto);
 				return ResponseEntity.ok(true);
 
@@ -54,13 +55,12 @@ public class ProdutoController {
 			e.printStackTrace();
 			return ResponseEntity.ok(false);
 		}
-
 	}
 	
 	@GetMapping("/retornoProdutos")
 	@Operation(summary= "Retorna todos os produtos do estoque")
 	public ResponseEntity<ArrayList<Produto>> retornoPodutos(){
-		ArrayList<Produto> produtos= (ArrayList<Produto>) produtoDao.findAll();
+		ArrayList<Produto> produtos= (ArrayList<Produto>) produtoDao.queryModeloUnico();		
 		return ResponseEntity.ok(produtos);
 	}
 

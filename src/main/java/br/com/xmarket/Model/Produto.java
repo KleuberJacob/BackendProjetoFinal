@@ -31,13 +31,31 @@ public class Produto {
 	
 	@Column(name="imagem_produto")
 	private String imagem_produto;
+	
+	@Column(name="modelo_unico")
+	private String modelo_unico;
 
 	public Produto(){
 		super();
 	}
 
+	public Produto(int codigo_produto, String nome_produto, String tipo_produto, String descricao_produto,
+			String preco_produto, String tamanho_produto, String quantidade_produto, String imagem_produto,
+			String modelo_unico) {
+		super();
+		this.codigo_produto = codigo_produto;
+		this.nome_produto = nome_produto;
+		this.tipo_produto = tipo_produto;
+		this.descricao_produto = descricao_produto;
+		this.preco_produto = preco_produto;
+		this.tamanho_produto = tamanho_produto;
+		this.quantidade_produto = quantidade_produto;
+		this.imagem_produto = imagem_produto;
+		this.modelo_unico = modelo_unico;
+	}
+
 	public Produto(String nome_produto, String tipo_produto, String descricao_produto, String preco_produto, String tamanho_produto,
-			String quantidade_produto, String imagem_produto) {
+			String quantidade_produto, String imagem_produto, String modelo_unico) {
 		super();
 		this.nome_produto = nome_produto;
 		this.tipo_produto = tipo_produto;
@@ -46,6 +64,7 @@ public class Produto {
 		this.tamanho_produto = tamanho_produto;
 		this.quantidade_produto = quantidade_produto;
 		this.imagem_produto = imagem_produto;
+		this.modelo_unico = modelo_unico;
 	}
 
 	public int getCodigo_produto() {
@@ -72,7 +91,13 @@ public class Produto {
 		this.tipo_produto = tipo_produto;
 	}
 	
-	
+	public String getModelo_unico() {
+		return modelo_unico;
+	}
+
+	public void setModelo_unico(String modelo_unico) {
+		this.modelo_unico = modelo_unico;
+	}
 
 	public String getDescricao_produto() {
 		return descricao_produto;
