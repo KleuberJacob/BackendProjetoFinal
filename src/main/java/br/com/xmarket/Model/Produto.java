@@ -17,14 +17,33 @@ public class Produto {
 	@Column(name="tipo_produto")
 	private String tipo_produto;
 	
+	@Column(name="descricao_produto")
+	private String descricao_produto;
+	
 	@Column(name="preco_produto")
-	private float preco_produto;	
+	private String preco_produto;	
 	
 	@Column(name="tamanho_produto")
-	private int tamanho_produto;	
+	private String tamanho_produto;	
 	
 	@Column(name="quantidade_produto")
-	private int quantidade_produto;
+	private String quantidade_produto;
+	
+	@Column(name="imagem_produto")
+	private String imagem_produto;
+
+
+	public Produto(String nome_produto, String tipo_produto, String descricao_produto, String preco_produto, String tamanho_produto,
+			String quantidade_produto, String imagem_produto) {
+		super();
+		this.nome_produto = nome_produto;
+		this.tipo_produto = tipo_produto;
+		this.descricao_produto= descricao_produto;
+		this.preco_produto = preco_produto;
+		this.tamanho_produto = tamanho_produto;
+		this.quantidade_produto = quantidade_produto;
+		this.imagem_produto = imagem_produto;
+	}
 
 	public int getCodigo_produto() {
 		return codigo_produto;
@@ -49,28 +68,46 @@ public class Produto {
 	public void setTipo_produto(String tipo_produto) {
 		this.tipo_produto = tipo_produto;
 	}
+	
+	
 
-	public float getPreco_produto() {
+	public String getDescricao_produto() {
+		return descricao_produto;
+	}
+
+	public void setDescricao_produto(String descricao_produto) {
+		this.descricao_produto = descricao_produto;
+	}
+
+	public String getImagem_produto() {
+		return imagem_produto;
+	}
+
+	public void setImagem_produto(String imagem_produto) {
+		this.imagem_produto = imagem_produto;
+	}
+
+	public String getPreco_produto() {
 		return preco_produto;
 	}
 
-	public void setPreco_produto(float preco_produto) {
+	public void setPreco_produto(String preco_produto) {
 		this.preco_produto = preco_produto;
 	}
 
-	public int getTamanho_produto() {
+	public String getTamanho_produto() {
 		return tamanho_produto;
 	}
 
-	public void setTamanho_produto(int tamanho_produto) {
+	public void setTamanho_produto(String tamanho_produto) {
 		this.tamanho_produto = tamanho_produto;
 	}
 
-	public int getQuantidade_produto() {
+	public String getQuantidade_produto() {
 		return quantidade_produto;
 	}
 
-	public void setQuantidade_produto(int quantidade_produto) {
+	public void setQuantidade_produto(String quantidade_produto) {
 		this.quantidade_produto = quantidade_produto;
 	}	
 	

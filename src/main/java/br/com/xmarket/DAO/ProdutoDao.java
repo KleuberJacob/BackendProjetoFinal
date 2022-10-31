@@ -21,4 +21,12 @@ public interface ProdutoDao extends CrudRepository<Produto, Integer> {
 	@Transactional
 	@Query(value= "update produto set quantidade_produto= quantidade_produto - :quantidade where codigo_produto= :codigo_produto", nativeQuery=true)
 	Integer queryAtualizarQuantidade(String quantidade, String codigo_produto);
+	
+//	@Modifying
+//	@Transactional
+//	@Query(value= "update produto set quantidade_produto= quantidade_produto + :quantidade where codigo_produto= :codigo_produto", nativeQuery=true)
+//	Integer querySomarQuantidade(String quantidade, String codigo_produto);
+	
+	@Query(value= "select codigo_produto from produto where nome_produto= :nome and tamanho_produto= :tamanho", nativeQuery=true)
+	String queryAcharProduto(String nome, String tamanho);
 }
